@@ -91,12 +91,7 @@ public class StuAddDiag extends JDialog implements ActionListener {
 				//加载驱动
 				Class.forName("com.mysql.jdbc.Driver");
 				System.out.println("StuAddDiag的JDBC驱动加载成功");
-				
-				//定义数据库的常量
-				String url="jdbc:mysql://localhost:3306/studentmanagement";//数据库的地址
-				String user="root";//MySQL的用户名
-				String passwd="123456";//MySQL密码
-				ct=DriverManager.getConnection(url,user,passwd);
+				ct=DriverManager.getConnection(MySqlAccount.url,MySqlAccount.user,MySqlAccount.passwd);
 				
 				//编辑sql语句
 				String strsql="insert into stuInformation values(?,?,?,?,?,?)";

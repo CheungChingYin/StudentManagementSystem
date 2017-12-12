@@ -33,7 +33,7 @@ public class ManagementMain extends JFrame implements ActionListener {
 	ResultSet rs=null;
 	
 	public static void main(String[] args) {
-		ManagementMain test3=new ManagementMain();
+		Login login=new Login();
 	}
 	public ManagementMain() {
 		// ¹¹Ôìº¯Êý

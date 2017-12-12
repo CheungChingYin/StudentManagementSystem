@@ -101,10 +101,7 @@ public class StuUpDiag extends JDialog implements ActionListener {
 			try {
 				
 				Class.forName("com.mysql.jdbc.Driver");
-				String url="jdbc:mysql://localhost:3306/studentmanagement";
-				String user="root";
-				String passwd="123456";
-				ct=DriverManager.getConnection(url,user,passwd);
+				ct=DriverManager.getConnection(MySqlAccount.url,MySqlAccount.user,MySqlAccount.passwd);
 				String strsql="UPDATE `studentmanagement`.`stuinformation` SET `stuId`=?, `stuName`=?, `stuSex`=?, `stuAge`=?, `stuSpecialty`=?, `stuDept`=? WHERE `stuId`=?;";
 				ps=ct.prepareStatement(strsql);
 				
@@ -119,6 +116,7 @@ public class StuUpDiag extends JDialog implements ActionListener {
 				ps.setString(7, temp);
 				ps.executeUpdate();
 				this.dispose();//关闭学生对话框
+				StuModel sm=new StuModel();
 				
 			} catch (Exception e2) {
 				e2.printStackTrace();

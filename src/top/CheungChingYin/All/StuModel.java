@@ -36,12 +36,7 @@ public class StuModel extends AbstractTableModel {
 			//驱动加载
 			Class.forName("com.mysql.jdbc.Driver");
 			System.out.println("StuModel的JDBC驱动加载成功");
-			//连接数据库,定义常量
-			String url="jdbc:mysql://localhost:3306/studentmanagement";
-			String user="root";
-			String passwd="123456";
-			
-			ct=DriverManager.getConnection(url,user,passwd);
+			ct=DriverManager.getConnection(MySqlAccount.url,MySqlAccount.user,MySqlAccount.passwd);
 			stat=ct.createStatement();
 			rs=stat.executeQuery(sql);//查询结果
 			
