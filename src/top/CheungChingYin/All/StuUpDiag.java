@@ -30,6 +30,8 @@ public class StuUpDiag extends JDialog implements ActionListener {
 	JButton jb1,jb2;
 	
 	public StuUpDiag(Frame owner, String title, boolean modal, StuModel sm, int rowNum) {
+		
+		
 		jl1=new JLabel("学号");
 		jl2=new JLabel("姓名");
 		jl3=new JLabel("性别");

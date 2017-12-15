@@ -132,6 +132,9 @@ public class Login extends JFrame implements ActionListener {
 			}
 			
 		}
+		else if(e.getSource()==jb2){
+			this.dispose();
+		}
 		
 	}
 	

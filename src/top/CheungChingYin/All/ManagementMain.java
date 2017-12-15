@@ -111,11 +111,8 @@ public class ManagementMain extends JFrame implements ActionListener {
 				Class.forName("com.mysql.jdbc.Driver");
 				System.out.println("Test3的JDBC驱动加载成功");
 				//连接MySQL数据库
-				String url="jdbc:mysql://localhost:3306/studentmanagement";//数据库的地址
-				String user="root";//MySQL的用户名
-				String passwd="123456";//MySQL密码
 				
-				ct=DriverManager.getConnection(url, user, passwd);
+				ct=DriverManager.getConnection(MySqlAccount.url, MySqlAccount.user, MySqlAccount.passwd);
 				System.out.println("数据库连接成功");
 				/*
 				 * PreparedStatement 实例包含已编译的 SQL 语句。这就是使语句“准备好”。包含于

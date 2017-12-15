@@ -133,8 +133,4 @@ public class StuAddDiag extends JDialog implements ActionListener {
 			this.dispose();//按取消键关闭当前窗口
 		}
 	}
-
-
-
-
 }
