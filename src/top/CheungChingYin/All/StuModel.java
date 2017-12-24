@@ -5,11 +5,13 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Vector;
 import javax.swing.table.*;
-
+/*
+ * 这个类用于控制表格显示的内容
+ */
 public class StuModel extends AbstractTableModel {
 	
 	//存放行数据
-	Vector rowData,columnNames;
+	Vector rowData,columnNames;//Vector用于插入功能
 	
 	//定义数据库变量
 	Statement stat=null;
@@ -18,13 +20,14 @@ public class StuModel extends AbstractTableModel {
 	
 	//初始化
 	public void init(String sql){
-		if(sql.equals("")){
+		if(sql.equals("")){//如果SQL语句为空就执行一下SQL语句
 			sql="select * from stuInformation";
+			
 		}
 		
 		//设置列名
 		columnNames=new Vector();
-		columnNames.add("学号");
+		columnNames.add("学号");//设置每个列的名字
 		columnNames.add("姓名");
 		columnNames.add("性别");
 		columnNames.add("年龄");
@@ -38,7 +41,7 @@ public class StuModel extends AbstractTableModel {
 			System.out.println("StuModel的JDBC驱动加载成功");
 			ct=DriverManager.getConnection(MySqlAccount.url,MySqlAccount.user,MySqlAccount.passwd);
 			stat=ct.createStatement();
-			rs=stat.executeQuery(sql);//查询结果
+			rs=stat.executeQuery(sql);//执行查询
 			
 			while(rs.next()){//下移一行
 				Vector hang = new Vector();
@@ -49,7 +52,7 @@ public class StuModel extends AbstractTableModel {
 				hang.add(rs.getString(5));
 				hang.add(rs.getString(6));
 				
-				rowData.add(hang);
+				rowData.add(hang);//把每一行数据暂时储存起来
 				
 			}
 			
@@ -91,23 +94,23 @@ public class StuModel extends AbstractTableModel {
 	}
 
 	@Override
-	public int getRowCount() {
+	public int getRowCount() {//返回有多少行
 		return rowData.size();
 	}
 
 	@Override
-	public int getColumnCount() {
+	public int getColumnCount() {//返回有多少列
 		return this.columnNames.size();
 	}
 
 	@Override
 	//获得某行某列数据
-	public Object getValueAt(int row, int column) {
+	public Object getValueAt(int row, int column) {//返回某行某列的一个数据
 		return ((Vector)(this.rowData.get(row))).get(column);
 	}
 	
 	//得到属性名字
-	public String getColumnName(int column){
+	public String getColumnName(int column){//返回第几列
 		return (String)this.columnNames.get(column);
 	}
 

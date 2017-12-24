@@ -16,7 +16,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-
+/*
+ * 这个类负责显示表格，查询功能，和容纳其他功能按钮。
+ */
 public class ManagementMain extends JFrame implements ActionListener {
 //定义控件
 	JPanel jp1,jp2;
@@ -33,15 +35,15 @@ public class ManagementMain extends JFrame implements ActionListener {
 	ResultSet rs=null;
 	
 	public static void main(String[] args) {
-		Login login=new Login();
+		Login login=new Login();//先把账户登录界面显示出来
 	}
 	public ManagementMain() {
 		// 构造函数
 		jp1=new JPanel();
 		jtf=new JTextField(10);
 		jb1=new JButton("查询");
-		jb1.addActionListener(this);
-		jl1=new JLabel("请输入名字：");
+		jb1.addActionListener(this);//把按钮添加到监听器中
+		jl1=new JLabel("请输入名字或学号：");
 	
 		jp1.add(jl1);
 		jp1.add(jtf);
@@ -60,7 +62,7 @@ public class ManagementMain extends JFrame implements ActionListener {
 		jp2.add(jb4);
 	
 		//创建模板对象
-		sm=new StuModel();
+		sm=new StuModel();//把表格模块建立
 	
 		//初始化
 		jt=new JTable(sm);
@@ -72,20 +74,32 @@ public class ManagementMain extends JFrame implements ActionListener {
 		this.add(jp2,"South");
 		this.setSize(600,400);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setLocationRelativeTo(null);//设置窗口位置为居中
+		this.setTitle("学生管理系统");
 		this.setVisible(true);
 		
 	}
 	@Override
 	public void actionPerformed(ActionEvent a) {
 		// TODO Auto-generated method stub
-		if(a.getSource()==jb1){
+		if(a.getSource()==jb1){//点击“查询”按钮
 			System.out.println("用户希望查询...");
-			String name=this.jtf.getText().trim();
-			String sql="SELECT * FROM stuInformation WHERE stuName='"+name+"'";//SQL的选择语句
+			String name=this.jtf.getText().trim();//获得输入的内容
+			String sql;
+			if(name.matches("[0-9]+")){//如果输入的内容是纯数字，则是查询学号，这个[0-9]+是正则表达式，表示纯数字的意思
+				sql="SELECT * FROM stuInformation WHERE stuId='"+name+"'";
+			}else{//如果不是纯数字的话就是输入了名字，执行查询名字的SQL语句
+				sql="SELECT * FROM stuInformation WHERE stuName='"+name+"'";
+			}
+			
+			if(name.equals("")){//如果输入为空，则提示错误。并且刷新一次表格
+				sql="select * from stuInformation";
+				JOptionPane.showMessageDialog(this, "请输入需要查询的名字");
+			}
 			sm=new StuModel(sql);
 			jt.setModel(sm);
 		}
-		else if(a.getSource()==jb2){
+		else if(a.getSource()==jb2){//点击“添加”按钮
 			//弹出添加界面
 			System.out.println("添加...");
 			StuAddDiag sa=new StuAddDiag(this,"添加学生",true);
@@ -93,7 +107,7 @@ public class ManagementMain extends JFrame implements ActionListener {
 			sm=new StuModel();
 			jt.setModel(sm);
 		}
-		else if(a.getSource()==jb4){
+		else if(a.getSource()==jb4){//点击“删除”按钮
 			//删除记录
 			//获得学生id
 			int rowNum=this.jt.getSelectedRow();//返回用户点中的行
@@ -149,7 +163,7 @@ public class ManagementMain extends JFrame implements ActionListener {
 			//更新jtable
 			jt.setModel(sm);
 		}
-		else if(a.getSource()==jb3){
+		else if(a.getSource()==jb3){//点击“修改”按钮
 			System.out.println("用户希望修改...");
 			//用户修改模块
 			int rowNum=this.jt.getSelectedRow();

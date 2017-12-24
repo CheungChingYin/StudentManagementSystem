@@ -16,19 +16,15 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
+/*
+ * 用于登录界面，验证是否是管理员
+ */
 public class Login extends JFrame implements ActionListener {
 
 	JLabel jl1,jl2;
 	JTextField jf1,jf2;
 	JButton jb1,jb2;
 	JPanel jp1,jp2,jp3;
-	
-	
-	
-	public static void main(String[] args) {
-		Login l=new Login();
-	}
 	
 	public Login() {
 
@@ -68,6 +64,7 @@ public class Login extends JFrame implements ActionListener {
 		this.setSize(250,100);
 		this.setTitle("用户登陆");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setLocationRelativeTo(null);//设置窗口位置为居中
 		this.setVisible(true);
 		
 		
@@ -95,17 +92,15 @@ public class Login extends JFrame implements ActionListener {
 				stat=ct.createStatement();
 				rs=stat.executeQuery(sql);//#######################
 				while(rs.next()){
-//					System.out.println(rs.getString(1));
-//					System.out.println(rs.getString(2));
-//					System.out.println(name);
-//					System.out.println(password);
 					if(name.equals(rs.getString(1)) && password.equals(rs.getString(2))){//这里不能直接使用==，只能用string.equals()
 						JOptionPane.showMessageDialog(this, "登录成功");
-						ManagementMain test3=new ManagementMain();
-						this.dispose();
+						ManagementMain test3=new ManagementMain();//登录成功后显示主界面
+						this.dispose();//登录窗口关闭
+						break;
 					}
-					else{
+					else{//账号密码错误
 						JOptionPane.showMessageDialog(this, "账户或密码错误");
+						break;
 					}
 				}
 				
@@ -132,7 +127,7 @@ public class Login extends JFrame implements ActionListener {
 			}
 			
 		}
-		else if(e.getSource()==jb2){
+		else if(e.getSource()==jb2){//点击取消按钮
 			this.dispose();
 		}
 		

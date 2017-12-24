@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -16,7 +17,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
+/*
+ * 学生信息添加模块
+ */
 public class StuAddDiag extends JDialog implements ActionListener {
 	
 	JLabel jl1,jl2,jl3,jl4,jl5,jl6;
@@ -75,7 +78,7 @@ public class StuAddDiag extends JDialog implements ActionListener {
 		this.add(jp1,BorderLayout.WEST);
 		this.add(jp2, BorderLayout.CENTER);
 		this.add(jp3, BorderLayout.SOUTH);
-		
+		this.setLocationRelativeTo(null);
 		this.setSize(300,200);
 		this.setVisible(true);
 		
@@ -86,30 +89,79 @@ public class StuAddDiag extends JDialog implements ActionListener {
 			Connection ct=null;
 			PreparedStatement ps=null;
 			ResultSet rs=null;
+			Statement stat=null;
 			
 			try {
 				//加载驱动
 				Class.forName("com.mysql.jdbc.Driver");
 				System.out.println("StuAddDiag的JDBC驱动加载成功");
 				ct=DriverManager.getConnection(MySqlAccount.url,MySqlAccount.user,MySqlAccount.passwd);
+				String idSQL="select * from stuInformation";//这个SQL语句用于下面的语句查询id是否重复，需要进行轮询
+				stat=ct.createStatement();
+				rs=stat.executeQuery(idSQL);//执行SQL语句
 				
 				//编辑sql语句
-				String strsql="insert into stuInformation values(?,?,?,?,?,?)";
+				String strsql="insert into stuInformation values(?,?,?,?,?,?)";//添加资料的SQL语句
 				ps=ct.prepareStatement(strsql);
+				while(rs.next()){//轮询学生资料表的内容
+					//给对象赋值
+					if(jf1.getText().equals(rs.getString(1))){//如果输入框输入的内容等于轮询结果的内容，显示学号重复
+						JOptionPane.showMessageDialog(this, "学号重复");
+						break;
+					}else if(jf1.getText().length()<15 &&jf1.getText().length()!=0 ||jf1.getText().length()>15){
+						JOptionPane.showMessageDialog(this, "学号长度必须要为15位，请重新输入！");
+						break;
+					}else if(jf1.getText().length()==0){
+						JOptionPane.showMessageDialog(this, "学号不能为空！");
+						break;
+					}else{
+						ps.setString(1, jf1.getText());
+						break;
+					}
+				}
 				
-				//给对象赋值
-				ps.setString(1, jf1.getText());
-				ps.setString(2, jf2.getText());
-				ps.setString(3, jf3.getText());
-				ps.setString(4, jf4.getText());
-				ps.setString(5, jf5.getText());
-				ps.setString(6, jf6.getText());
+				if(jf2.getText().length()>=1){//保证姓名要有字符
+					ps.setString(2, jf2.getText());
+				}else{
+					JOptionPane.showMessageDialog(this, "姓名不能为空");
+				}
+				
+				
+				if(jf3.getText().equals("男") || jf3.getText().equals("女")){
+					ps.setString(3, jf3.getText());
+				}else if(jf1.getText().length()==0){
+					JOptionPane.showMessageDialog(this, "性别不能为空！");
+				}else{
+					JOptionPane.showMessageDialog(this, "性别只能填 “男” 或 “女” ！");
+				}
+				
+				
+				if(jf4.getText().length()<=2 && jf4.getText().length() !=0){
+					ps.setString(4, jf4.getText());
+				}else if(jf4.getText().length()==0){
+					JOptionPane.showMessageDialog(this, "年龄不能为空！");
+				}else{
+					JOptionPane.showMessageDialog(this, "年龄格式不对！");
+				}
+				
+				
+				if(jf5.getText().length()>=1){
+					ps.setString(5, jf5.getText());
+				}else{
+					JOptionPane.showMessageDialog(this, "专业不能为空 ！");
+				}
+				
+				
+				if(jf6.getText().length()>=1){
+					ps.setString(6, jf6.getText());
+				}else{
+					JOptionPane.showMessageDialog(this, "系部不能为空！");
+				}
 				
 				ps.executeUpdate();
 				this.dispose();//关闭学生对话框
 			} catch (Exception e2) {
 				e2.printStackTrace();
-				JOptionPane.showMessageDialog(this, "学号重复");
 			}finally {
 				try{
 					if(rs!=null){
