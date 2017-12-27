@@ -91,18 +91,22 @@ public class Login extends JFrame implements ActionListener {
 				String sql="SELECT * FROM login";
 				stat=ct.createStatement();
 				rs=stat.executeQuery(sql);//#######################
+				boolean flag=true;
 				while(rs.next()){
 					if(name.equals(rs.getString(1)) && password.equals(rs.getString(2))){//这里不能直接使用==，只能用string.equals()
 						JOptionPane.showMessageDialog(this, "登录成功");
 						ManagementMain test3=new ManagementMain();//登录成功后显示主界面
+						flag=false;
 						this.dispose();//登录窗口关闭
 						break;
+						
 					}
-					else{//账号密码错误
-						JOptionPane.showMessageDialog(this, "账户或密码错误");
-						break;
-					}
+					
 				}
+				if(flag){
+					JOptionPane.showMessageDialog(this, "账户或密码错误");//账号密码错误
+				}
+				
 				
 			} catch (Exception e2) {
 				e2.printStackTrace();
